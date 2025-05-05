@@ -2,8 +2,8 @@
 dist/
 .output/
 
-# generated content
-content/
+# Comment out the content folder so it can be included in GitHub Pages build
+# content/
 
 # dependencies
 node_modules/

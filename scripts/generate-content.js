@@ -88,11 +88,29 @@ async function createPlaceholders() {
   }
 }
 
+// Criar estrutura de diretórios necessária
+async function createStructure() {
+  const dirs = [
+    path.join(process.cwd(), 'content'),
+    path.join(process.cwd(), 'content/empower'),
+    path.join(process.cwd(), 'content/glucose'),
+    path.join(process.cwd(), 'public'),
+    path.join(process.cwd(), '.github'),
+    path.join(process.cwd(), '.github/workflows')
+  ];
+  
+  for (const dir of dirs) {
+    await ensureDir(dir);
+    console.log(`Ensured directory exists: ${dir}`);
+  }
+}
+
 // Main execution
 async function main() {
   const count = process.argv[2] ? parseInt(process.argv[2]) : 10;
   
   try {
+    await createStructure();
     await createPlaceholders();
     await generateEmpowerPages(count);
     await generateGlucosePages(count);

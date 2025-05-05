@@ -36,10 +36,16 @@ yarn
 3. Generate sample content:
 
 ```bash
-node scripts/generate-content.js 10
+npm run setup
 ```
 
-This will create 10 pages for each template with unique content generated using faker-js.
+This will create 10 pages for each template with unique content generated using faker-js. You can also generate a custom number of pages with:
+
+```bash
+npm run generate -- 20
+```
+
+This would generate 20 pages for each template.
 
 ### Development
 
@@ -60,6 +66,31 @@ npm run build
 # or
 yarn build
 ```
+
+## Deployment to GitHub Pages
+
+This project is configured for easy deployment to GitHub Pages:
+
+1. Push your code to a GitHub repository
+2. Go to your repository settings -> Pages
+3. Under "Build and deployment" section:
+   - Set "Source" to "GitHub Actions"
+4. The project will be automatically built and deployed whenever you push to the main branch
+
+### Manual Deployment
+
+If you prefer to deploy manually:
+
+1. Build the project:
+```bash
+npm run build
+```
+
+2. Configure GitHub Pages to use the `docs` folder:
+   - Go to your repository settings -> Pages
+   - Set "Source" to "Deploy from a branch" 
+   - Select "master" or "main" branch and "/docs" folder
+   - Click "Save"
 
 ## Features
 
