@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EmpowerTemplate from '../../components/EmpowerTemplate.astro';
+import { createClient } from 'tinacms/dist/client';
+
+const client = createClient({
+  token: 'your-access-token',
+  url: 'https://your-tina-instance-url.io',
+  queries: (client: any) => ({
+    empowerTemplateConnection: async (): Promise<{ data: { empowerTemplateConnection: { edges: any[] } } }> => {
+      // Define your query logic here
+      return { data: { empowerTemplateConnection: { edges: [] } } };
+    },
+  }),
+});
+import { tinaField } from 'tinacms/dist/react';
+
+export async function getStaticPaths() {
+  const empowerPagesResponse = await client.queries.empowerTemplateConnection();
+  const empowerPages = empowerPagesResponse.data.empowerTemplateConnection.edges || [];
+
+  return empowerPages.map(edge => {
+    return {
+      params: { id: edge.node.id.toString() },
+      props: { data: edge.node }
+    };
+  });
+}
+
+const { data } = Astro.props;
+const { id } = Astro.params;
+---
+
+<Layout title={data.title}>
+  <EmpowerTemplate data={data} />
+</Layout>

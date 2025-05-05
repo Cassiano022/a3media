@@ -9,6 +9,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.10"
+    "@faker-js/faker": "^9.7.0",
+    "@tinacms/cli": "^1.9.5",
+    "astro": "^5.7.10",
+    "tinacms": "^2.7.5"
+  },
+  "devDependencies": {
+    "@astrojs/node": "^9.2.1",
+    "@types/node": "^22.15.8"
   }
 }

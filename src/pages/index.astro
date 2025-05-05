@@ -1,11 +1,134 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import { createClient } from 'tinacms/dist/client';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const client = createClient({
+  url: 'https://your-tina-instance-url.io', // Replace with your Tina instance URL
+  token: 'your-access-token', // Replace with your actual access token
+  queries: (client) => ({
+    empowerTemplateConnection: () => Promise.resolve({ data: { empowerTemplateConnection: { edges: [] } } }),
+    glucoseTemplateConnection: () => Promise.resolve({ data: { glucoseTemplateConnection: { edges: [] } } }),
+  }),
+}) as {
+  queries: {
+    empowerTemplateConnection: () => Promise<{ data: { empowerTemplateConnection: { edges: Array<{ node: { id: string; title: string } }> } } }>;
+    glucoseTemplateConnection: () => Promise<{ data: { glucoseTemplateConnection: { edges: Array<{ node: { id: string; title: string } }> } } }>;
+  };
+};
+
+// Get all empower pages
+const empowerPagesResponse = await client.queries.empowerTemplateConnection();
+const empowerPages = empowerPagesResponse.data.empowerTemplateConnection.edges || [];
+
+// Get all glucose pages
+const glucosePagesResponse = await client.queries.glucoseTemplateConnection();
+const glucosePages = glucosePagesResponse.data.glucoseTemplateConnection.edges || [];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="A3 Media Landing Pages">
+  <main>
+    <div class="container">
+      <h1>A3 Media Landing Page Templates</h1>
+      
+      <section class="template-section">
+        <h2>Template 1: Flow Empower</h2>
+        <p>Based on: <a href="https://getflowempower.com/ps/pscollins01" target="_blank">https://getflowempower.com/ps/pscollins01</a></p>
+        
+        <div class="pages-grid">
+          {empowerPages.map(edge => (
+            <a href={`/paginatemplate1/${edge.node.id}`} class="page-card">
+              <h3>{edge.node.title}</h3>
+              <p>Page ID: {edge.node.id}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+      
+      <section class="template-section">
+        <h2>Template 2: Glucose Control Guide</h2>
+        <p>Based on: <a href="https://glucosecontrolguide.com/fb/sgs/vsl3/prn-ca1/h1l1/" target="_blank">https://glucosecontrolguide.com/fb/sgs/vsl3/prn-ca1/h1l1/</a></p>
+        
+        <div class="pages-grid">
+          {glucosePages.map(edge => (
+            <a href={`/paginatemplate2/${edge.node.id}`} class="page-card">
+              <h3>{edge.node.title}</h3>
+              <p>Page ID: {edge.node.id}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
 </Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+  }
+  
+  .template-section {
+    margin-bottom: 60px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  }
+  
+  .template-section h2 {
+    color: #1a56db;
+    margin-bottom: 10px;
+  }
+  
+  .template-section p {
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  .pages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .page-card {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 20px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+  }
+  
+  .page-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-color: #d1d5db;
+  }
+  
+  .page-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #1a56db;
+  }
+  
+  .page-card p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .pages-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  }
+</style>
